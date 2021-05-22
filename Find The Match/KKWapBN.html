@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)https://cdpn.io/bhumikhokhani/fullpage/KKWapBN -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  
+  
+<link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png">
+<meta name="apple-mobile-web-app-title" content="CodePen">
+
+<link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+
+<link rel="mask-icon" type="" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg" color="#111">
+
+
+  <title>CodePen - Find the Match</title>
+  
+  
+  
+  
+<style>
+@font-face {
+        font-family: "Comic Sans MS";
+    }
+ @font-face {
+        font-family: "Comic Sans MS";
+ }
+    * {
+        box-sizing: border-box;
+    }
+    html {
+        min-height: 100vh;   
+    }
+    body {
+        margin: 0;
+        background: linear-gradient(#e66465, #9198e5);
+    }
+
+    .page-title {
+        color: #ffa766;
+        font-family: Comic Sans MS, serif;
+        font-weight: normal;
+        text-align: center;
+        font-size: 6em;
+    }
+
+    .game-info-container {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+    }
+    .game-info {
+        font-family: serif, serif;
+        color: #FFBB89;
+        font-size: 4em;
+    }
+    .game-container {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+        grid-gap: 10px;
+        margin: 50px;
+        justify-content: center;
+        perspective: 500px;
+    }
+    .card {
+        position: relative;
+        height: 175px;
+        width: 125px;
+    }
+
+    img {
+        position: relative;
+        height: 175px;
+        width: 125px;
+    }
+    .card-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        backface-visibility: hidden;
+        border-radius: 12px;
+        border-width: 1px;
+        border-style: solid;
+        transition: transform 500ms ease-in-out;
+    }
+ .card.visible .card-back {
+        transform: rotateY(-180deg);
+    }
+
+    .card.visible .card-front {
+        transform: rotateY(0);
+    }
+
+    .card.matched .card-value {
+        animation: dance 1s linear infinite 500ms;
+    }
+.overlay-text {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        color: #f2b25e;
+        font-family: Comic Sans MS, serif;
+    }
+
+    .overlay-text-small {
+        font-size: .3em;
+    }
+
+    .overlay-text.visible {
+        display: flex;
+        flex-direction: column;
+        animation: overlay-grow 500ms forwards;
+    }
+
+    @keyframes overlay-grow {
+        from {
+            background-color: rgba(0, 0, 0, 0);
+            font-size: 0;
+        }
+
+        to {
+            background-color: rgba(0, 0, 0, .8);
+            font-size: 10em;
+        }
+    }
+
+     @keyframes dance {
+        0%, 100% {
+            transform: rotate(0);
+        } 
+
+        25% {
+            transform: rotate(-10deg);
+        }
+
+        75% {
+            transform: rotate(10deg);
+        }
+    }
+
+    .card-back {
+        background-color: black;
+        border-color: #FF6D00;
+    }
+    .card-front {
+        background-color: #FFBB89;
+        border-color: #333;
+        transform: rotateY(180deg);
+    }
+    .card-value {
+        transition: transform 100ms ease-in-out;
+        transform: scale(.9);
+    }
+
+    .card-front:hover .card-value {
+        transform: scale(1);
+    }
+
+    .carder {
+        position: absolute;
+        width: 47px;
+        height: 47px;
+        transition: width 100ms ease-in-out, height 100ms ease-in-out;
+    }
+
+    .card-face:hover .carder {
+        width: 52px;
+        height: 52px;
+    }
+
+    .carder-top-left {
+        transform: rotate(270deg);
+        top: 0;
+        left: 0;
+    }
+
+    .carder-top-right {
+        top: 0;
+        right: 0;
+    }
+    .carder-bottom-left {
+        transform: rotate(180deg);
+        bottom: 0;
+        left: 0;
+    }
+.carder-bottom-right {
+        transform: rotate(90deg);
+        bottom: 0;
+        right: 0;
+    }
+.card_pic {
+        align-self: flex-start;
+        transform: translateY(-10px);
+        transition: transform 100ms ease-in-out;
+    }
+.card-back:hover .card_pic {
+        transform: translateY(0);
+    }
+@media (max-width: 600px) {
+        .game-container {
+ grid-template-columns: repeat(2, auto);
+        }
+.game-info-container {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+
+</head>
+
+<body translate="no">
+  
+    <title>Find the Match!</title>
+
+
+  <h1 class="page-title">Find the Match!</h1>
+    <div class="overlay-text">
+        Let's Start!
+    </div> 
+    <div id="game-over-text" class="overlay-text">
+        GAME OVER!
+        <span class="overlay-text-small">Start Again!</span>
+    </div>
+    <div id="victory-text" class="overlay-text">
+        Hurray! You Won!
+        <span class="overlay-text-small">Restart!</span>
+    </div>
+    <div class="game-container">
+        <div class="game-info-container">
+            <div class="game-info">
+                Time <span id="time-remaining">91</span>
+            </div>
+            <div class="game-info">
+                Flips <span id="flips">0</span>
+            </div>
+        </div>
+        <div class="card" style="order: 6;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-pig-eating-pizza-cartoon-illustration-animal-food-concept-isolated-flat-cartoon_138676-2301.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 10;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-cat-unicorn-play-box-cartoon-icon-illustration_138676-2645.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 1;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-penguin-flying-with-balloons-cartoon-vector-illustration-animal-love-concept-isolated-vector-flat-cartoon-style_138676-2016.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 5;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-panda-holding-love-cartoon-icon-illustration_138676-2666.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 7;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-elephant-sitting-waving-hand-cartoon-vector-icon-illustration_138676-2220.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 14;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-hamster-holding-cheek-cartoon-illustration_138676-2773.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 0;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-sloth-yoga-cartoon-icon-illustration_138676-2250.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 13;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-koala-lifting-barbell-cartoon-illustration_138676-2987.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 3;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-pig-eating-pizza-cartoon-illustration-animal-food-concept-isolated-flat-cartoon_138676-2301.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 11;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-cat-unicorn-play-box-cartoon-icon-illustration_138676-2645.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 8;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-penguin-flying-with-balloons-cartoon-vector-illustration-animal-love-concept-isolated-vector-flat-cartoon-style_138676-2016.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 12;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-panda-holding-love-cartoon-icon-illustration_138676-2666.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 9;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-elephant-sitting-waving-hand-cartoon-vector-icon-illustration_138676-2220.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 2;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-hamster-holding-cheek-cartoon-illustration_138676-2773.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 15;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-sloth-yoga-cartoon-icon-illustration_138676-2250.jpg">
+            </div>
+        </div>
+        <div class="card" style="order: 4;">
+            <div class="card-back card-face">
+                <img class="carder carder-top-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-top-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-left" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="carder carder-bottom-right" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+                <img class="card_pic" src="./floral-drawing-seamless-pattern-botanical-hand-drawn-ink-texture-handmade-childish-style-with-colorful-background-vector.jpg">
+            </div>
+            <div class="card-front card-face">
+                <img class="card-value" src="./cute-koala-lifting-barbell-cartoon-illustration_138676-2987.jpg">
+            </div>
+        </div>
+    </div>
+
+
+    <script src="./stopExecutionOnTimeout-157cd5b220a5c80d4ff8e0e70ac069bffd87a61252088146915e8726e5d9f147.js.download"></script>
+
+  
+      <script id="rendered-js">
+class AudioController {
+  constructor() {
+    this.bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3');
+    this.flipSound = new Audio('');
+    this.matchSound = new Audio('');
+    this.victorySound = new Audio('');
+    this.gameOverSound = new Audio('');
+    this.bgMusic.volume = 0.5;
+    this.bgMusic.loop = true;
+  }
+  startMusic() {
+    this.bgMusic.play();
+  }
+  stopMusic() {
+    this.bgMusic.pause();
+    this.bgMusic.currentTime = 0;
+  }
+  flip() {
+    this.flipSound.play();
+  }
+  match() {
+    this.matchSound.play();
+  }
+  victory() {
+    this.stopMusic();
+    this.victorySound.play();
+  }
+  gameOver() {
+    this.stopMusic();
+    this.gameOverSound.play();
+  }}
+
+
+class FindMe {
+  constructor(totalTime, cards) {
+    this.cardsArray = cards;
+    this.totalTime = totalTime;
+    this.timeRemaining = totalTime;
+    this.timer = document.getElementById('time-remaining');
+    this.ticker = document.getElementById('flips');
+    this.audioController = new AudioController();
+  }
+  startGame() {
+    this.totalClicks = 0;
+    this.timeRemaining = this.totalTime;
+    this.cardToCheck = null;
+    this.matchedCards = [];
+    this.busy = true;
+    setTimeout(() => {
+      this.audioController.startMusic();
+      this.shuffleCards(this.cardsArray);
+      this.countdown = this.startCountdown();
+      this.busy = false;
+    }, 500);
+    this.hideCards();
+    this.timer.innerText = this.timeRemaining;
+    this.ticker.innerText = this.totalClicks;
+  }
+  startCountdown() {
+    return setInterval(() => {
+      this.timeRemaining--;
+      this.timer.innerText = this.timeRemaining;
+      if (this.timeRemaining === 0)
+      this.gameOver();
+    }, 1000);
+  }
+  gameOver() {
+    clearInterval(this.countdown);
+    this.audioController.gameOver();
+    document.getElementById('game-over-text').classList.add('visible');
+  }
+  victory() {
+    clearInterval(this.countdown);
+    this.audioController.victory();
+    document.getElementById('victory-text').classList.add('visible');
+  }
+  hideCards() {
+    this.cardsArray.forEach(card => {
+      card.classList.remove('visible');
+      card.classList.remove('matched');
+    });
+  }
+  flipCard(card) {
+    if (this.canFlipCard(card)) {
+      this.audioController.flip();
+      this.totalClicks++;
+      this.ticker.innerText = this.totalClicks;
+      card.classList.add('visible');
+      if (this.cardToCheck) {
+        this.checkForCardMatch(card);
+      } else {
+        this.cardToCheck = card;
+      }
+    }
+  }
+  checkForCardMatch(card) {
+    if (this.getCardType(card) === this.getCardType(this.cardToCheck))
+    this.cardMatch(card, this.cardToCheck);else
+
+    this.cardMismatch(card, this.cardToCheck);
+    this.cardToCheck = null;
+  }
+  cardMatch(card1, card2) {
+    this.matchedCards.push(card1);
+    this.matchedCards.push(card2);
+    card1.classList.add('matched');
+    card2.classList.add('matched');
+    this.audioController.match();
+    if (this.matchedCards.length === this.cardsArray.length)
+    this.victory();
+  }
+  cardMismatch(card1, card2) {
+    this.busy = true;
+    setTimeout(() => {
+      card1.classList.remove('visible');
+      card2.classList.remove('visible');
+      this.busy = false;
+    }, 1000);
+  }
+  shuffleCards(cardsArray) {
+    for (let i = cardsArray.length - 1; i > 0; i--) {
+      const randIndex = Math.floor(Math.random() * (i + 1));
+      [cardsArray[i], cardsArray[randIndex]] = [cardsArray[randIndex], cardsArray[i]];}
+    cardsArray = cardsArray.map((card, index) => {
+      card.style.order = index;
+    });
+  }
+  getCardType(card) {
+    return card.getElementsByClassName('card-value')[0].src;
+  }
+  canFlipCard(card) {
+    return !this.busy && !this.matchedCards.includes(card) && card !== this.cardToCheck;
+  }}
+if (document.readyState == 'loading') {document.addEventListener('DOMContentLoaded', ready);
+} else {
+  ready();
+}
+function ready() {
+  let overlays = Array.from(document.getElementsByClassName('overlay-text'));
+  let cards = Array.from(document.getElementsByClassName('card'));
+  let game = new FindMe(100, cards);
+  overlays.forEach(overlay => {
+    overlay.addEventListener('click', () => {
+      overlay.classList.remove('visible');
+      game.startGame();
+    });
+  });
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      game.flipCard(card);
+    });
+  });
+}
+//# sourceURL=pen.js
+    </script>
+
+  
+
+
+
+
+ 
+</body></html>
