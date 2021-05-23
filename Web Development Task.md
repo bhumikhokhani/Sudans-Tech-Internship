@@ -7,4 +7,5 @@ https://codepen.io/bhumikhokhani/full/rNyjoPO -> Jigsaw Puzzle </br>
 https://codepen.io/bhumikhokhani/full/KKWapBN -> Find The Match </br>
 Other Projects: </br>
 https://codepen.io/bhumikhokhani/full/PopbzaK -> Simple Calculator </br>
+https://codepen.io/bhumikhokhani/full/mdWWaQM -> CSS Emoji Art </br>
 
