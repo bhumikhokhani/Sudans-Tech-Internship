@@ -1,7 +1,7 @@
-Task 1: https://codepen.io/bhumikhokhani/full/NWdQaYd </br>
-Task 2: https://codepen.io/bhumikhokhani/full/yLMLKQE </br>
-Task 3: https://codepen.io/bhumikhokhani/full/OJpyvXq </br>
-Task 4: </br>
+Task 1: https://codepen.io/bhumikhokhani/full/NWdQaYd -> Evolution Of Mobile Phones </br>
+Task 2: https://codepen.io/bhumikhokhani/full/yLMLKQE -> Portfolio </br>
+Task 3: https://codepen.io/bhumikhokhani/full/OJpyvXq -> Flip-Flip </br>
+Task 4: https://codepen.io/bhumikhokhani/full/NWppEpr -> Time Format </br>
 Final Project: </br>
 https://codepen.io/bhumikhokhani/full/rNyjoPO -> Jigsaw Puzzle </br>
 https://codepen.io/bhumikhokhani/full/KKWapBN -> Find The Match </br>
